@@ -19,10 +19,10 @@ public class Temperature {
     @Transient
     private Long locationId;
 
-    private double value;
-
     @CreationTimestamp
     private Timestamp timestamp;
+
+    private double value;
 
     @ManyToOne
     @JoinColumn(name = "location_id")
