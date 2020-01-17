@@ -2,8 +2,6 @@ package pl.ryzykowski.arduino.arduinotemperaturews.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.ryzykowski.arduino.arduinotemperaturews.dto.TemperatureDto;
-import pl.ryzykowski.arduino.arduinotemperaturews.entity.Location;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.Temperature;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.LocationRepository;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.TemperatureRepository;
@@ -18,15 +16,13 @@ public class TemperatureService {
     LocationRepository locationRepository;
 
     @Autowired
-    public TemperatureService(TemperatureRepository temperatureRepository,
-                              LocationRepository locationRepository) {
+    public TemperatureService(TemperatureRepository temperatureRepository, LocationRepository locationRepository) {
         this.temperatureRepository = temperatureRepository;
         this.locationRepository = locationRepository;
     }
 
-    public void addTemperature(TemperatureDto temperatureDto){
-        Location location = locationRepository.findById(temperatureDto.getLocationId()).get();
-        Temperature temperature = new Temperature(temperatureDto.getValue(), location);
+    public void addTemperature(Temperature temperature){
+        temperature.setLocation(locationRepository.findById(temperature.getLocationId()).get());
         temperatureRepository.save(temperature);
     }
 

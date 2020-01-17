@@ -3,7 +3,6 @@ package pl.ryzykowski.arduino.arduinotemperaturews.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.ryzykowski.arduino.arduinotemperaturews.dto.TemperatureDto;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.Temperature;
 import pl.ryzykowski.arduino.arduinotemperaturews.service.TemperatureService;
 
@@ -21,8 +20,8 @@ public class TemperatureController {
     }
 
     @PostMapping
-    public void addTemperature(@RequestBody TemperatureDto temperatureDto){
-        temperatureService.addTemperature(temperatureDto);
+    public void addTemperature(@RequestBody Temperature temperature){
+        temperatureService.addTemperature(temperature);
     }
 
     @GetMapping
@@ -31,8 +30,7 @@ public class TemperatureController {
     }
 
     @GetMapping("/{location}")
-    public ResponseEntity<List<Temperature>> getTemperaturesForLocation (@PathVariable("location")
-                                                                                    String location) {
+    public ResponseEntity<List<Temperature>> getTemperaturesForLocation (@PathVariable("location") String location) {
         return ResponseEntity.ok(temperatureService.getTemperaturesForLocation(location));
     }
 }

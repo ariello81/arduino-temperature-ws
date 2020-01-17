@@ -12,7 +12,7 @@ import java.util.List;
 public class Location {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String description;
@@ -25,6 +25,10 @@ public class Location {
     private List<Temperature> temperatures;
 
     public Location() {
+    }
+
+    public Location(String description) {
+        this.description = description;
     }
 
     public Location(Long id, String description, Timestamp timestamp, List<Temperature> temperatures) {

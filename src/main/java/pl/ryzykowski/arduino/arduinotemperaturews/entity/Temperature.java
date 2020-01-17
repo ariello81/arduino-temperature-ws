@@ -1,6 +1,7 @@
 package pl.ryzykowski.arduino.arduinotemperaturews.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,9 +11,13 @@ import java.sql.Timestamp;
 public class Temperature {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Transient
+    private Long locationId;
 
     private double value;
 
@@ -32,6 +37,11 @@ public class Temperature {
         this.location = location;
     }
 
+    public Temperature(Long locationId, double value) {
+        this.locationId = locationId;
+        this.value = value;
+    }
+
     public Temperature(Long id, double value, Timestamp timestamp, Location location) {
         this.id = id;
         this.value = value;
@@ -45,6 +55,14 @@ public class Temperature {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(Long locationId) {
+        this.locationId = locationId;
     }
 
     public double getValue() {
