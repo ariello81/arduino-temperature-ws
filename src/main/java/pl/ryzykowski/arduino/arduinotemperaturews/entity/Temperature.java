@@ -2,6 +2,7 @@ package pl.ryzykowski.arduino.arduinotemperaturews.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -19,10 +20,12 @@ public class Temperature {
     @Transient
     private Long locationId;
 
+    @JsonProperty("x")
     @CreationTimestamp
     private Timestamp timestamp;
 
-    private double value;
+    @JsonProperty("y")
+    private double celsiusValue;
 
     @ManyToOne
     @JoinColumn(name = "location_id")
@@ -32,19 +35,19 @@ public class Temperature {
     public Temperature() {
     }
 
-    public Temperature(double value, Location location) {
-        this.value = value;
+    public Temperature(double celsiusValue, Location location) {
+        this.celsiusValue = celsiusValue;
         this.location = location;
     }
 
-    public Temperature(Long locationId, double value) {
+    public Temperature(Long locationId, double celsiusValue) {
         this.locationId = locationId;
-        this.value = value;
+        this.celsiusValue = celsiusValue;
     }
 
-    public Temperature(Long id, double value, Timestamp timestamp, Location location) {
+    public Temperature(Long id, double celsiusValue, Timestamp timestamp, Location location) {
         this.id = id;
-        this.value = value;
+        this.celsiusValue = celsiusValue;
         this.timestamp = timestamp;
         this.location = location;
     }
@@ -65,12 +68,12 @@ public class Temperature {
         this.locationId = locationId;
     }
 
-    public double getValue() {
-        return value;
+    public double getCelsiusValue() {
+        return celsiusValue;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setCelsiusValue(double celsiusValue) {
+        this.celsiusValue = celsiusValue;
     }
 
     public Timestamp getTimestamp() {

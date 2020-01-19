@@ -2,7 +2,6 @@ package pl.ryzykowski.arduino.arduinotemperaturews.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.ryzykowski.arduino.arduinotemperaturews.dto.TemperatureDto;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.Temperature;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.LocationRepository;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.TemperatureRepository;
@@ -37,10 +36,4 @@ public class TemperatureService {
                 .collect(Collectors.toList());
     }
 
-    public List<TemperatureDto> getTemperaturesDtoForLocation(String location){
-        return temperatureRepository.findAll().stream()
-                .filter(temperature -> temperature.getLocation().getDescription().equals(location))
-                .map(temperature -> new TemperatureDto(temperature.getTimestamp().toString(), temperature.getValue()))
-                .collect(Collectors.toList());
-    }
 }

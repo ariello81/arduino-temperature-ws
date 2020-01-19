@@ -3,7 +3,6 @@ package pl.ryzykowski.arduino.arduinotemperaturews.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.ryzykowski.arduino.arduinotemperaturews.dto.TemperatureDto;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.Temperature;
 import pl.ryzykowski.arduino.arduinotemperaturews.service.TemperatureService;
 
@@ -35,9 +34,4 @@ public class TemperatureController {
         return ResponseEntity.ok(temperatureService.getTemperaturesForLocation(location));
     }
 
-    @CrossOrigin
-    @GetMapping("/chart/{location}")
-    public ResponseEntity<List<TemperatureDto>> getTemperaturesDtoForLocation (@PathVariable("location") String location) {
-        return ResponseEntity.ok(temperatureService.getTemperaturesDtoForLocation(location));
-    }
 }

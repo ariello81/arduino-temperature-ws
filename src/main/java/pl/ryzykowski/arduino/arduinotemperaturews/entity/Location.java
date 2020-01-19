@@ -21,7 +21,6 @@ public class Location {
     private Timestamp timestamp;
 
     @OneToMany(mappedBy = "location")
-    @JsonIgnore
     private List<Temperature> temperatures;
 
     public Location() {

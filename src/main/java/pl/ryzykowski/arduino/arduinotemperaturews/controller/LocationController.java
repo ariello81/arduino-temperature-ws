@@ -19,6 +19,7 @@ public class LocationController {
         this.locationService = locationService;
     }
 
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<Location>> getLocations(){
         return ResponseEntity.ok(locationService.getAllLocations());
