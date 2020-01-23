@@ -2,10 +2,7 @@ package pl.ryzykowski.arduino.arduinotemperaturews.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.CoalSupply;
 import pl.ryzykowski.arduino.arduinotemperaturews.service.CoalSupplyService;
 
@@ -27,6 +24,7 @@ public class CoalSupplyController {
         return ResponseEntity.ok(coalSupplyService.addCoalSupply(coalSupply));
     }
 
+    @GetMapping
     public ResponseEntity<List<CoalSupply>> getAllCoalSupplies(){
         return ResponseEntity.ok(coalSupplyService.getAllCoalSupplies());
     }
