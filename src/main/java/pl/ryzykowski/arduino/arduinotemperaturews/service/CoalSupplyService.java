@@ -9,6 +9,7 @@ import static pl.ryzykowski.arduino.arduinotemperaturews.config.Globals.COAL_SUP
 import static pl.ryzykowski.arduino.arduinotemperaturews.config.Globals.COAL_SUPPLY_COEFFICIENT;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CoalSupplyService {
@@ -25,8 +26,12 @@ public class CoalSupplyService {
     }
 
     public List<CoalSupply> getAllCoalSupplies() {
-        List<CoalSupply> list = coalSupplyRepository.findAll();
-        list.stream().forEach(coalSupply -> coalSupply.setSupplyValue(COAL_SUPPLY_MAX_KG - coalSupply.getDistance()*COAL_SUPPLY_COEFFICIENT));
-        return list;
+        return coalSupplyRepository.findAll()
+                .stream()
+                .map(coalSupply -> {
+                            coalSupply.setSupplyValue(COAL_SUPPLY_MAX_KG - coalSupply.getDistance()*COAL_SUPPLY_COEFFICIENT);
+                            return coalSupply;
+                        })
+                .collect(Collectors.toList());
     }
 }
