@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.CoalSupply;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.CoalSupplyRepository;
 
+import static pl.ryzykowski.arduino.arduinotemperaturews.config.Globals.COAL_SUPPLY_MAX_KG;
+import static pl.ryzykowski.arduino.arduinotemperaturews.config.Globals.COAL_SUPPLY_COEFFICIENT;
+
 import java.util.List;
 
 @Service
@@ -22,6 +25,8 @@ public class CoalSupplyService {
     }
 
     public List<CoalSupply> getAllCoalSupplies() {
-        return coalSupplyRepository.findAll();
+        List<CoalSupply> list = coalSupplyRepository.findAll();
+        list.stream().forEach(coalSupply -> coalSupply.setSupplyValue(COAL_SUPPLY_MAX_KG - coalSupply.getDistance()*COAL_SUPPLY_COEFFICIENT));
+        return list;
     }
 }

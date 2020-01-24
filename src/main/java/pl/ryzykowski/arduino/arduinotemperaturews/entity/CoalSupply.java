@@ -67,4 +67,5 @@ public class CoalSupply {
     public void setSupplyValue(double supplyValue) {
         this.supplyValue = supplyValue;
     }
+
 }
