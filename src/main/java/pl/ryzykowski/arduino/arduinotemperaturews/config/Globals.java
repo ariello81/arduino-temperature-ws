@@ -1,7 +1,9 @@
 package pl.ryzykowski.arduino.arduinotemperaturews.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Globals {
 
     public static int COAL_SUPPLY_MAX_KG;
