@@ -1,6 +1,5 @@
 package pl.ryzykowski.arduino.arduinotemperaturews.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -18,10 +17,6 @@ public class CoalSupply {
 
     private int distance;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Transient
-    private double supplyValue;
-
     public CoalSupply() {
     }
 
@@ -29,11 +24,10 @@ public class CoalSupply {
         this.distance = distance;
     }
 
-    public CoalSupply(Long id, Timestamp timestamp, int distance, double supplyValue) {
+    public CoalSupply(Long id, Timestamp timestamp, int distance) {
         this.id = id;
         this.timestamp = timestamp;
         this.distance = distance;
-        this.supplyValue = supplyValue;
     }
 
     public Long getId() {
@@ -60,12 +54,5 @@ public class CoalSupply {
         this.distance = distance;
     }
 
-    public double getSupplyValue() {
-        return supplyValue;
-    }
-
-    public void setSupplyValue(double supplyValue) {
-        this.supplyValue = supplyValue;
-    }
 
 }

@@ -2,6 +2,7 @@ package pl.ryzykowski.arduino.arduinotemperaturews.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.ryzykowski.arduino.arduinotemperaturews.dto.CoalSupplyDTO;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.CoalSupply;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.CoalSupplyRepository;
 
@@ -25,13 +26,12 @@ public class CoalSupplyService {
         return coalSupplyRepository.save(coalSupply);
     }
 
-    public List<CoalSupply> getAllCoalSupplies() {
+    public List<CoalSupplyDTO> getAllCoalSupplies() {
         return coalSupplyRepository.findAll()
                 .stream()
-                .map(coalSupply -> {
-                            coalSupply.setSupplyValue(COAL_SUPPLY_MAX_KG - coalSupply.getDistance()*COAL_SUPPLY_COEFFICIENT);
-                            return coalSupply;
-                        })
+                .map(coalSupply
+                        -> new CoalSupplyDTO(coalSupply.getTimestamp(),
+                        COAL_SUPPLY_MAX_KG - coalSupply.getDistance()*COAL_SUPPLY_COEFFICIENT))
                 .collect(Collectors.toList());
     }
 }
