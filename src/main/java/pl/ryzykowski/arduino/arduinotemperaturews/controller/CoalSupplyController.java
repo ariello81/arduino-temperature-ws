@@ -25,6 +25,7 @@ public class CoalSupplyController {
         return ResponseEntity.ok(coalSupplyService.addCoalSupply(coalSupply));
     }
 
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<CoalSupplyDTO>> getAllCoalSupplies(){
         return ResponseEntity.ok(coalSupplyService.getAllCoalSupplies());
