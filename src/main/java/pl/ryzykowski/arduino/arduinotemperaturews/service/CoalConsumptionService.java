@@ -20,4 +20,12 @@ public class CoalConsumptionService {
     public List<CoalConsumption> getAllCoalConsumptions() {
         return coalConsumptionRepository.findAll();
     }
+
+    public CoalConsumption addCoalConsumption(CoalConsumption coalConsumption){
+        return coalConsumptionRepository.save(coalConsumption);
+    }
+
+    public CoalConsumption getLastCoalConsumption(){
+        return coalConsumptionRepository.findTopByOrderByTimestampDesc();
+    }
 }

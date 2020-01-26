@@ -34,4 +34,8 @@ public class CoalSupplyService {
                         COAL_SUPPLY_MAX_KG - coalSupply.getDistance()*COAL_SUPPLY_COEFFICIENT))
                 .collect(Collectors.toList());
     }
+
+    public CoalSupply getLastCoalSupply(){
+        return coalSupplyRepository.findTopByOrderByTimestampDesc();
+    }
 }
