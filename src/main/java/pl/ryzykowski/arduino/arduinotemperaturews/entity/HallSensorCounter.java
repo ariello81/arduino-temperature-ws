@@ -9,24 +9,24 @@ import javax.persistence.Id;
 import java.sql.Timestamp;
 
 @Entity
-public class CoalConsumption {
+public class HallSensorCounter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
+    private int quantity;
 
     @CreationTimestamp
     private Timestamp timestamp;
 
-    private double kgValue;
-
-    public CoalConsumption() {
+    public HallSensorCounter() {
     }
 
-    public CoalConsumption(Long id, Timestamp timestamp, int kgValue) {
+    public HallSensorCounter(Long id, int quantity, Timestamp timestamp) {
         this.id = id;
+        this.quantity = quantity;
         this.timestamp = timestamp;
-        this.kgValue = kgValue;
     }
 
     public Long getId() {
@@ -37,19 +37,19 @@ public class CoalConsumption {
         this.id = id;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public Timestamp getTimestamp() {
         return timestamp;
     }
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public double getKgValue() {
-        return kgValue;
-    }
-
-    public void setKgValue(double kgValue) {
-        this.kgValue = kgValue;
     }
 }
