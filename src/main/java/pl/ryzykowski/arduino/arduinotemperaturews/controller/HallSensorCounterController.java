@@ -32,7 +32,7 @@ public class HallSensorCounterController {
     }
 
     @GetMapping("/by-hour")
-    public ResponseEntity<List<HallSensorCounterDTO>> getCoalConsumptionsByHour(){
+    public ResponseEntity<List<CoalConsumptionDTO>> getCoalConsumptionsByHour(){
         return ResponseEntity.ok(hallSensorCounterService.getCoalConsumptionsByHour());
     }
 }

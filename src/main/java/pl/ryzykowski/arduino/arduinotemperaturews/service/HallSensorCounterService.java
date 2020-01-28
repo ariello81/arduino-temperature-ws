@@ -35,7 +35,11 @@ public class HallSensorCounterService {
                 .collect(Collectors.toList());
     }
 
-    public List<HallSensorCounterDTO> getCoalConsumptionsByHour(){
-        return hallSensorCounterRepository.getCoalConsumptionsByHour();
+    public List<CoalConsumptionDTO> getCoalConsumptionsByHour(){
+        return hallSensorCounterRepository.getCoalConsumptionsByHour()
+                .stream()
+                .map(hallSensorCounterDTO -> new CoalConsumptionDTO(hallSensorCounterDTO.getDate(),
+                        hallSensorCounterDTO.getSumQuantity()*COAL_WEIGHT_PER_RATE))
+                .collect(Collectors.toList());
     }
 }
