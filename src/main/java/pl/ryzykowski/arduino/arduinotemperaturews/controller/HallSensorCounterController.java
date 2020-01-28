@@ -26,11 +26,13 @@ public class HallSensorCounterController {
         return ResponseEntity.ok(hallSensorCounterService.add(hallSensorCounter));
     }
 
+    @CrossOrigin
     @GetMapping("/by-day")
     public ResponseEntity<List<CoalConsumptionDTO>> getCoalConsumptionsByDay(){
         return ResponseEntity.ok(hallSensorCounterService.getCoalConsumptionsByDay());
     }
 
+    @CrossOrigin
     @GetMapping("/by-hour")
     public ResponseEntity<List<CoalConsumptionDTO>> getCoalConsumptionsByHour(){
         return ResponseEntity.ok(hallSensorCounterService.getCoalConsumptionsByHour());
