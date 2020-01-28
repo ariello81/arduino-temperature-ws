@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.ryzykowski.arduino.arduinotemperaturews.dto.CoalConsumptionDTO;
+import pl.ryzykowski.arduino.arduinotemperaturews.dto.HallSensorCounterDTO;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.HallSensorCounter;
 import pl.ryzykowski.arduino.arduinotemperaturews.service.HallSensorCounterService;
 
@@ -31,7 +32,7 @@ public class HallSensorCounterController {
     }
 
     @GetMapping("/by-hour")
-    public ResponseEntity<List<CoalConsumptionDTO>> getCoalConsumptionsByHour(){
+    public ResponseEntity<List<HallSensorCounterDTO>> getCoalConsumptionsByHour(){
         return ResponseEntity.ok(hallSensorCounterService.getCoalConsumptionsByHour());
     }
 }
