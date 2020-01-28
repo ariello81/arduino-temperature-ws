@@ -35,4 +35,5 @@ public class HallSensorCounterController {
     public ResponseEntity<List<CoalConsumptionDTO>> getCoalConsumptionsByHour(){
         return ResponseEntity.ok(hallSensorCounterService.getCoalConsumptionsByHour());
     }
+
 }
