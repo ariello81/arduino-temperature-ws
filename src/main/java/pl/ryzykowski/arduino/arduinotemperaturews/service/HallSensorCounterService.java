@@ -3,7 +3,6 @@ package pl.ryzykowski.arduino.arduinotemperaturews.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.ryzykowski.arduino.arduinotemperaturews.dto.CoalConsumptionDTO;
-import pl.ryzykowski.arduino.arduinotemperaturews.dto.HallSensorCounterDTO;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.HallSensorCounter;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.HallSensorCounterRepository;
 
@@ -22,24 +21,80 @@ public class HallSensorCounterService {
         this.hallSensorCounterRepository = hallSensorCounterRepository;
     }
 
-
     public HallSensorCounter add(HallSensorCounter hallSensorCounter) {
         return hallSensorCounterRepository.save(hallSensorCounter);
     }
 
-    public List<CoalConsumptionDTO> getCoalConsumptionsByDay(){
-        return hallSensorCounterRepository.getCoalConsumptionsByDay()
+    public List<CoalConsumptionDTO> getCoalConsumptionsLastDayByHour(){
+        return hallSensorCounterRepository.getCoalConsumptionsLastDayByHour()
                 .stream()
                 .map(hallSensorCounterDTO -> new CoalConsumptionDTO(hallSensorCounterDTO.getDate(),
                         hallSensorCounterDTO.getSumQuantity()*COAL_WEIGHT_PER_RATE))
                 .collect(Collectors.toList());
     }
 
-    public List<CoalConsumptionDTO> getCoalConsumptionsByHour(){
-        return hallSensorCounterRepository.getCoalConsumptionsByHour()
+    public List<CoalConsumptionDTO> getCoalConsumptionsLastWeekByHour(){
+        return hallSensorCounterRepository.getCoalConsumptionsLastWeekByHour()
                 .stream()
                 .map(hallSensorCounterDTO -> new CoalConsumptionDTO(hallSensorCounterDTO.getDate(),
                         hallSensorCounterDTO.getSumQuantity()*COAL_WEIGHT_PER_RATE))
                 .collect(Collectors.toList());
     }
+
+    public List<CoalConsumptionDTO> getCoalConsumptionsLastMonthByDay(){
+        return hallSensorCounterRepository.getCoalConsumptionsLastMonthByDay()
+                .stream()
+                .map(hallSensorCounterDTO -> new CoalConsumptionDTO(hallSensorCounterDTO.getDate(),
+                        hallSensorCounterDTO.getSumQuantity()*COAL_WEIGHT_PER_RATE))
+                .collect(Collectors.toList());
+    }
+
+    public List<CoalConsumptionDTO> getCoalConsumptionsLastYearByMonth(){
+        return hallSensorCounterRepository.getCoalConsumptionsLastYearByMonth()
+                .stream()
+                .map(hallSensorCounterDTO -> new CoalConsumptionDTO(hallSensorCounterDTO.getDate(),
+                        hallSensorCounterDTO.getSumQuantity()*COAL_WEIGHT_PER_RATE))
+                .collect(Collectors.toList());
+    }
+
+    public List<CoalConsumptionDTO> getCoalConsumptionsAllYearsByYear(){
+        return hallSensorCounterRepository.getCoalConsumptionsAllYearsByYear()
+                .stream()
+                .map(hallSensorCounterDTO -> new CoalConsumptionDTO(hallSensorCounterDTO.getDate(),
+                        hallSensorCounterDTO.getSumQuantity()*COAL_WEIGHT_PER_RATE))
+                .collect(Collectors.toList());
+    }
+
+    public List<CoalConsumptionDTO> getCoalConsumptionsForDateByHour(String date){
+        return hallSensorCounterRepository.getCoalConsumptionsForDateByHour(date)
+                .stream()
+                .map(hallSensorCounterDTO -> new CoalConsumptionDTO(hallSensorCounterDTO.getDate(),
+                        hallSensorCounterDTO.getSumQuantity()*COAL_WEIGHT_PER_RATE))
+                .collect(Collectors.toList());
+    }
+
+    public List<CoalConsumptionDTO> getCoalConsumptionsForDateByDay(String date){
+        return hallSensorCounterRepository.getCoalConsumptionsForDateByDay(date)
+                .stream()
+                .map(hallSensorCounterDTO -> new CoalConsumptionDTO(hallSensorCounterDTO.getDate(),
+                        hallSensorCounterDTO.getSumQuantity()*COAL_WEIGHT_PER_RATE))
+                .collect(Collectors.toList());
+    }
+
+    public List<CoalConsumptionDTO> getCoalConsumptionsForDateByMonth(String date){
+        return hallSensorCounterRepository.getCoalConsumptionsForDateByMonth(date)
+                .stream()
+                .map(hallSensorCounterDTO -> new CoalConsumptionDTO(hallSensorCounterDTO.getDate(),
+                        hallSensorCounterDTO.getSumQuantity()*COAL_WEIGHT_PER_RATE))
+                .collect(Collectors.toList());
+    }
+
+    public List<CoalConsumptionDTO> getCoalConsumptionsForDateByYear(String date){
+        return hallSensorCounterRepository.getCoalConsumptionsForDateByYear(date)
+                .stream()
+                .map(hallSensorCounterDTO -> new CoalConsumptionDTO(hallSensorCounterDTO.getDate(),
+                        hallSensorCounterDTO.getSumQuantity()*COAL_WEIGHT_PER_RATE))
+                .collect(Collectors.toList());
+    }
+
 }
