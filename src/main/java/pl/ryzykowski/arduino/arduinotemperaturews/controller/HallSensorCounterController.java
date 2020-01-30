@@ -8,6 +8,7 @@ import pl.ryzykowski.arduino.arduinotemperaturews.dto.HallSensorCounterDTO;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.HallSensorCounter;
 import pl.ryzykowski.arduino.arduinotemperaturews.service.HallSensorCounterService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,6 +25,17 @@ public class HallSensorCounterController {
     @PostMapping
     public ResponseEntity<HallSensorCounter> add(@RequestBody HallSensorCounter hallSensorCounter){
         return ResponseEntity.ok(hallSensorCounterService.add(hallSensorCounter));
+    }
+
+    @CrossOrigin
+    @GetMapping("/total")
+    public ResponseEntity<List<List<CoalConsumptionDTO>>> getTotalCoalConsumptions(){
+        List<List<CoalConsumptionDTO>> total = new ArrayList<>();
+        total.add(hallSensorCounterService.getTotalCoalConsumptionsByHour());
+        total.add(hallSensorCounterService.getTotalCoalConsumptionsByDay());
+        total.add(hallSensorCounterService.getTotalCoalConsumptionsByMonth());
+        total.add(hallSensorCounterService.getTotalCoalConsumptionsByYear());
+        return ResponseEntity.ok(total);
     }
 
     @CrossOrigin

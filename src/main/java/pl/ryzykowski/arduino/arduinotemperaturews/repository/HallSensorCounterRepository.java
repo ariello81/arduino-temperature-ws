@@ -36,24 +36,45 @@ public interface HallSensorCounterRepository extends JpaRepository<HallSensorCou
 
 
     @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-%d %H:00') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "WHERE timestamp LIKE ':date%' GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d %H:00')",
+            "WHERE timestamp LIKE :date% GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d %H:00')",
             nativeQuery = true)
     public List<HallSensorCounterDTO> getCoalConsumptionsForDateByHour(@Param("date") String date);
 
     @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "WHERE timestamp LIKE '?%' GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d')",
+            "WHERE timestamp LIKE :date% GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d')",
             nativeQuery = true)
-    public List<HallSensorCounterDTO> getCoalConsumptionsForDateByDay(String date);
+    public List<HallSensorCounterDTO> getCoalConsumptionsForDateByDay(@Param("date") String date);
 
     @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "WHERE timestamp LIKE '?%' GROUP BY DATE_FORMAT(timestamp,'%Y-%m')",
+            "WHERE timestamp LIKE :date% GROUP BY DATE_FORMAT(timestamp,'%Y-%m')",
             nativeQuery = true)
-    public List<HallSensorCounterDTO> getCoalConsumptionsForDateByMonth(String date);
+    public List<HallSensorCounterDTO> getCoalConsumptionsForDateByMonth(@Param("date") String date);
 
     @Query(value="SELECT DATE_FORMAT(timestamp,'%Y') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "WHERE timestamp LIKE '?%' GROUP BY DATE_FORMAT(timestamp,'%Y')",
+            "WHERE timestamp LIKE :date% GROUP BY DATE_FORMAT(timestamp,'%Y')",
             nativeQuery = true)
-    public List<HallSensorCounterDTO> getCoalConsumptionsForDateByYear(String date);
+    public List<HallSensorCounterDTO> getCoalConsumptionsForDateByYear(@Param("date") String date);
+
+
+    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-%d %H:00') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
+            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d %H:00')",
+            nativeQuery = true)
+    public List<HallSensorCounterDTO> getTotalCoalConsumptionsByHour();
+
+    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
+            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d')",
+            nativeQuery = true)
+    public List<HallSensorCounterDTO> getTotalCoalConsumptionsByDay();
+
+    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
+            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m')",
+            nativeQuery = true)
+    public List<HallSensorCounterDTO> getTotalCoalConsumptionsByMonth();
+
+    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
+            "GROUP BY DATE_FORMAT(timestamp,'%Y')",
+            nativeQuery = true)
+    public List<HallSensorCounterDTO> getTotalCoalConsumptionsByYear();
 
 
 }
