@@ -131,4 +131,7 @@ public class HallSensorCounterService {
                 .collect(Collectors.toList());
     }
 
+    public List<HallSensorCounter> getAllSensorCounters() {
+        return hallSensorCounterRepository.findAll();
+    }
 }

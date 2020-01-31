@@ -39,6 +39,12 @@ public class HallSensorCounterController {
     }
 
     @CrossOrigin
+    @GetMapping("/all")
+    public ResponseEntity<List<HallSensorCounter>> getAllSensorCounters(){
+        return ResponseEntity.ok(hallSensorCounterService.getAllSensorCounters());
+    }
+
+    @CrossOrigin
     @GetMapping("/last-day")
     public ResponseEntity<List<CoalConsumptionDTO>> getCoalConsumptionsLastDay(){
         return ResponseEntity.ok(hallSensorCounterService.getCoalConsumptionsLastDayByHour());
