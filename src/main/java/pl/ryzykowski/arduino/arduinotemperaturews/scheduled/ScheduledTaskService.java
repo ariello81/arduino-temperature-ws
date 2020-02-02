@@ -8,17 +8,12 @@ import pl.ryzykowski.arduino.arduinotemperaturews.service.CoalSupplyService;
 @Service
 public class ScheduledTaskService {
 
-    private CoalConsumptionService coalConsumptionService;
     private CoalSupplyService coalSupplyService;
 
     @Autowired
-    public ScheduledTaskService(CoalConsumptionService coalConsumptionService, CoalSupplyService coalSupplyService) {
-        this.coalConsumptionService = coalConsumptionService;
+    public ScheduledTaskService(CoalSupplyService coalSupplyService) {
         this.coalSupplyService = coalSupplyService;
     }
 
-    public CoalConsumption addCoalConsumption(){
-       return null;
-    }
 
 }
