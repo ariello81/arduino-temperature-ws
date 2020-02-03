@@ -2,10 +2,12 @@ package pl.ryzykowski.arduino.arduinotemperaturews.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.sql.Timestamp;
+
 public class CoalConsumptionDTO {
 
     @JsonProperty("x")
-    private String date;
+    private Timestamp date;
 
     @JsonProperty("y")
     private double consumptionValue;
@@ -13,16 +15,16 @@ public class CoalConsumptionDTO {
     public CoalConsumptionDTO() {
     }
 
-    public CoalConsumptionDTO(String date, double consumptionValue) {
+    public CoalConsumptionDTO(Timestamp date, double consumptionValue) {
         this.date = date;
         this.consumptionValue = consumptionValue;
     }
 
-    public String getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

@@ -56,23 +56,23 @@ public interface HallSensorCounterRepository extends JpaRepository<HallSensorCou
     public List<HallSensorCounterDTO> getCoalConsumptionsForDateByYear(@Param("date") String date);
 
 
-    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-%d %H:00') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d %H:00')",
+    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-%d %H:00:00') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
+            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d %H:00:00')",
             nativeQuery = true)
     public List<HallSensorCounterDTO> getTotalCoalConsumptionsByHour();
 
-    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-%d') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d')",
+    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-%d 00:00:00') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
+            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d 00:00:00')",
             nativeQuery = true)
     public List<HallSensorCounterDTO> getTotalCoalConsumptionsByDay();
 
-    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m')",
+    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-01 00:00:00') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
+            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-01 00:00:00')",
             nativeQuery = true)
     public List<HallSensorCounterDTO> getTotalCoalConsumptionsByMonth();
 
-    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "GROUP BY DATE_FORMAT(timestamp,'%Y')",
+    @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-01-01 00:00:00') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
+            "GROUP BY DATE_FORMAT(timestamp,'%Y-01-01 00:00:00')",
             nativeQuery = true)
     public List<HallSensorCounterDTO> getTotalCoalConsumptionsByYear();
 
