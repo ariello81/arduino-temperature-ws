@@ -2,6 +2,7 @@ package pl.ryzykowski.arduino.arduinotemperaturews.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class CoalConsumptionDTO {
@@ -10,12 +11,12 @@ public class CoalConsumptionDTO {
     private Timestamp date;
 
     @JsonProperty("y")
-    private double consumptionValue;
+    private BigDecimal consumptionValue;
 
     public CoalConsumptionDTO() {
     }
 
-    public CoalConsumptionDTO(Timestamp date, double consumptionValue) {
+    public CoalConsumptionDTO(Timestamp date, BigDecimal consumptionValue) {
         this.date = date;
         this.consumptionValue = consumptionValue;
     }
@@ -28,11 +29,11 @@ public class CoalConsumptionDTO {
         this.date = date;
     }
 
-    public double getConsumptionValue() {
+    public BigDecimal getConsumptionValue() {
         return consumptionValue;
     }
 
-    public void setConsumptionValue(double consumptionValue) {
+    public void setConsumptionValue(BigDecimal consumptionValue) {
         this.consumptionValue = consumptionValue;
     }
 }
