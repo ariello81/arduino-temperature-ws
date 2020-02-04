@@ -34,6 +34,12 @@ public class HallSensorCounterController {
         return ResponseEntity.ok(hallSensorCounterService.getAllSensorCounters());
     }
 
+    @CrossOrigin
+    @GetMapping("/total")
+    public ResponseEntity<Integer> getTotalSensorQuantities(){
+        return ResponseEntity.ok(hallSensorCounterService.getTotalSensorsQuantities());
+    }
+
 
 
 }
