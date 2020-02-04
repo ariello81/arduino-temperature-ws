@@ -18,4 +18,8 @@ public class CoalThrowService {
     public CoalThrow addCoalThrow(CoalThrow coalThrow) {
         return coalThrowRepository.save(coalThrow);
     }
+
+    public int getAllCoalThrowsSum(){
+        return coalThrowRepository.getAllCoalThrowsSum();
+    }
 }
