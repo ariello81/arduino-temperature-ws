@@ -23,13 +23,13 @@
 		<tr>
 			<td colspan="3" style="font-weight:bolder;">Ostatnia zarejestrowane parametry:</td>
 		</tr>
-		<tr style="background-color:#aaeeee">
-			<td>Gabinet:</td>
+		<tr style="background-color:#eeaaee">
+			<td>Kotłownia:</td>
 			<td id="temp0" style="font-weight:bolder;"></td>
 			<td id="date0"></td>
 		</tr>
-		<tr style="background-color:#eeaaee">
-			<td>Kotlownia:</td>
+		<tr style="background-color:#aaeeee">
+			<td>Piec:</td>
 			<td id="temp1" style="font-weight:bolder;"></td>
 			<td id="date1"></td>
 		</tr>
@@ -54,7 +54,7 @@
 <br/><br/>
 <div id="rok">Rok</div>
 <br/><br/>
-<div class="chart" style="position: relative; height:60vh; width:90vw">
+<div class="chart" style="position: relative; height:50vh; width:80vw">
 <canvas id="myChart"></canvas>
 </div>
 
@@ -95,40 +95,40 @@ $( "#rok" ).click(function() {
 	BuildChart(lastTemp0, lastTemp1, lastTemp2, coalYearValues)
 });
 
-function formatDate(date) {
-     var d = new Date(date),
+function formatDate() {
+     var d = new Date(),
          month = '' + (d.getMonth() + 1),
          day = '' + d.getDate(),
-         year = d.getFullYear();
-         hour = '' + d.getHour(),
-         minutes = '' + d.getMinutes();
+         year = d.getFullYear(),
+         hours = '' + d.getHours(),
+         minutes = '' + d.getMinutes(),
          seconds = '' + d.getSeconds();
 
      if (month.length < 2) month = '0' + month;
      if (day.length < 2) day = '0' + day;
-     if (hour.length < 2) hour = '0' + hour;
+     if (hours.length < 2) hours = '0' + hours;
      if (minutes.length < 2) minutes = '0' + minutes;
      if (seconds.length < 2) seconds = '0' + seconds;
 
-     return [year, month, day, hour, minutes, seconds].join('-');
+     return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
  }
 
 function BuildChart(temp0values, temp1values, temp2values, coalValues) {
     var data = {
         datasets: [{
-            label: 'gabinet', // Name the series
-			yAxisID: "temperature",
-            data: temp0values,
-			fill: false,
-			borderColor: 'rgb(0, 250, 250)',
-			pointRadius:'2'
-		},
-		{
 			label: 'kotlownia', // Name the series
 			yAxisID: "temperature",
             data: temp1values,
 			fill: false,
 			borderColor: 'rgb(250, 0, 250)',
+			pointRadius:'2'
+		},
+		{
+            label: 'piec', // Name the series
+			yAxisID: "temperature",
+            data: temp0values,
+			fill: false,
+			borderColor: 'rgb(0, 250, 250)',
 			pointRadius:'2'
 		},
 		{
@@ -215,21 +215,21 @@ var xhttp = new XMLHttpRequest();
 			lastDate0 = json[0].temperatures[json[0].temperatures.length-1].x;
 			lastTemp0 = json[0].temperatures[json[0].temperatures.length-1].y;
 			date0.innerHTML = moment(lastDate0).format('YYYY-MM-DD HH:mm:ss');
-			temp0.innerHTML = lastTemp0 + " &#176;C";			
+			temp0.innerHTML = lastTemp0.text().replace('.',',') + " &#176;C";
 			return e;
 		});
 		temp1values = json[1].temperatures.map(function (e) {
 			lastDate1 = json[1].temperatures[json[1].temperatures.length-1].x;
 			lastTemp1 = json[1].temperatures[json[1].temperatures.length-1].y;
 			date1.innerHTML = moment(lastDate1).format('YYYY-MM-DD HH:mm:ss');
-			temp1.innerHTML = lastTemp1 + " &#176;C";	
+			temp1.innerHTML = lastTemp1.text().replace('.',',') + " &#176;C";
 			return e;
 		});
 		temp2values = json[2].temperatures.map(function (e) {
 			lastDate2 = json[2].temperatures[json[2].temperatures.length-1].x;
 			lastTemp2 = json[2].temperatures[json[2].temperatures.length-1].y;
 			date2.innerHTML = moment(lastDate2).format('YYYY-MM-DD HH:mm:ss');
-			temp2.innerHTML = lastTemp2 + " &#176;C";	
+			temp2.innerHTML = lastTemp2.text().replace('.',',') + " &#176;C";
 			return e;
 		});
 		
@@ -257,18 +257,18 @@ var xhttp = new XMLHttpRequest();
 		});	
     }
   };
-  xhttpCoal.open("GET", apiUrlCoalSupply, false);
+  xhttpCoal.open("GET", apiUrlCoal, false);
   xhttpCoal.send();
 
   var xhttpCoalSupply = new XMLHttpRequest();
-  xhttpCoal.onreadystatechange = function() {
+  xhttpCoalSupply.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-        $("#coalSupplyDate").val($.format.date(new Date(), 'YYYY-MM-DD HH:mm:ss'));
-		coalSupplyValue.innerHTML = this.response + " kg";
+        coalSupplyDate.innerHTML = formatDate();
+		coalSupplyValue.innerHTML = (Math.round(this.response * 100) / 100).toFixed(3).replace('.',',') + " kg";
     }
   };
-  xhttpCoal.open("GET", apiUrlCoalSupply, false);
-  xhttpCoal.send();
+  xhttpCoalSupply.open("GET", apiUrlCoalSupply, false);
+  xhttpCoalSupply.send();
   
   BuildChart(temp0values, temp1values, temp2values, coalHourValues);
 </script>
