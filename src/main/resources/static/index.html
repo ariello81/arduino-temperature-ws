@@ -215,21 +215,21 @@ var xhttp = new XMLHttpRequest();
 			lastDate0 = json[0].temperatures[json[0].temperatures.length-1].x;
 			lastTemp0 = json[0].temperatures[json[0].temperatures.length-1].y;
 			date0.innerHTML = moment(lastDate0).format('YYYY-MM-DD HH:mm:ss');
-			temp0.innerHTML = lastTemp0.text().replace('.',',') + " &#176;C";
+			temp0.innerHTML = lastTemp0 + " &#176;C";
 			return e;
 		});
 		temp1values = json[1].temperatures.map(function (e) {
 			lastDate1 = json[1].temperatures[json[1].temperatures.length-1].x;
 			lastTemp1 = json[1].temperatures[json[1].temperatures.length-1].y;
 			date1.innerHTML = moment(lastDate1).format('YYYY-MM-DD HH:mm:ss');
-			temp1.innerHTML = lastTemp1.text().replace('.',',') + " &#176;C";
+			temp1.innerHTML = lastTemp1 + " &#176;C";
 			return e;
 		});
 		temp2values = json[2].temperatures.map(function (e) {
 			lastDate2 = json[2].temperatures[json[2].temperatures.length-1].x;
 			lastTemp2 = json[2].temperatures[json[2].temperatures.length-1].y;
 			date2.innerHTML = moment(lastDate2).format('YYYY-MM-DD HH:mm:ss');
-			temp2.innerHTML = lastTemp2.text().replace('.',',') + " &#176;C";
+			temp2.innerHTML = lastTemp2 + " &#176;C";
 			return e;
 		});
 		
