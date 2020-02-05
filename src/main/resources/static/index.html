@@ -83,16 +83,16 @@ $( "#change_date" ).click(function() {
 });
 
 $( "#godzina" ).click(function() {
-	BuildChart(lastTemp0, lastTemp1, lastTemp2, coalHourValues)
+	BuildChart(temp0values, temp1values, temp2values, coalHourValues)
 });
 $( "#dzien" ).click(function() {
-	BuildChart(lastTemp0, lastTemp1, lastTemp2, coalDayValues)
+	BuildChart(temp0values, temp1values, temp2values, coalDayValues)
 });
 $( "#miesiac" ).click(function() {
-	BuildChart(lastTemp0, lastTemp1, lastTemp2, coalMonthValues)
+	BuildChart(temp0values, temp1values, temp2values, coalMonthValues)
 });
 $( "#rok" ).click(function() {
-	BuildChart(lastTemp0, lastTemp1, lastTemp2, coalYearValues)
+	BuildChart(temp0values, temp1values, temp2values, coalYearValues)
 });
 
 function formatDate() {
