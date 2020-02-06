@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <tr id="user"></tr>
+</table>
+
+<script>
+    var url  = "";
+    var xhr  = new XMLHttpRequest()
+    xhr.open('GET', url, true)
+    xhr.onload = function () {
+        var users = JSON.parse(xhr.responseText);
+        if (xhr.readyState == 4 && xhr.status == "200") {
+        console.log(users);
+        for(var i = 0; i < user.length; i++){
+          var node = document.createElement("td");
+          var textnode = document.createTextNode(user[i]);
+          node.appendChild(textnode);
+          document.getElementById("user").appendChild(node);
+        }
+    }
+    xhr.send(null);
+        </script>
+</body>
+</html>

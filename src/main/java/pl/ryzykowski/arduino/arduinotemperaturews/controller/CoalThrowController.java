@@ -19,8 +19,10 @@ public class CoalThrowController {
         this.coalThrowService = coalThrowService;
     }
 
+    @CrossOrigin
     @PostMapping
-    public ResponseEntity<CoalThrow> addCoalThrow(@RequestBody CoalThrow coalThrow){
+    public ResponseEntity<CoalThrow> addCoalThrow(@ModelAttribute("kgValue") String kgValue){
+        CoalThrow coalThrow = new CoalThrow(Integer.valueOf(kgValue));
         return ResponseEntity.ok(coalThrowService.addCoalThrow(coalThrow));
     }
 
