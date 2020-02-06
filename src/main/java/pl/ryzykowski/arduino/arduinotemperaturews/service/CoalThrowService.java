@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.CoalThrow;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.CoalThrowRepository;
 
+import java.util.List;
+
 @Service
 public class CoalThrowService {
 
@@ -21,5 +23,9 @@ public class CoalThrowService {
 
     public int getAllCoalThrowsSum(){
         return coalThrowRepository.getAllCoalThrowsSum();
+    }
+
+    public List<CoalThrow> getAllCoalThrows(){
+        return coalThrowRepository.findAll();
     }
 }
