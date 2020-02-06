@@ -21,9 +21,11 @@ public class CoalThrowController {
 
     @CrossOrigin
     @PostMapping
-    public ResponseEntity<CoalThrow> addCoalThrow(@ModelAttribute("kgValue") String kgValue){
+    public String addCoalThrow(@RequestHeader("referer") String referer, @ModelAttribute("kgValue") String kgValue){
         CoalThrow coalThrow = new CoalThrow(Integer.valueOf(kgValue));
-        return ResponseEntity.ok(coalThrowService.addCoalThrow(coalThrow));
+        System.out.println("hello!");
+        ResponseEntity.ok(coalThrowService.addCoalThrow(coalThrow));
+        return "redirect:"+referer;
     }
 
     @CrossOrigin
