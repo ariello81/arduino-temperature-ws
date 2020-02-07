@@ -68,6 +68,7 @@ var apiUrlCoalSupply = "http://arduino-temperature-ws.herokuapp.com/coal-supply"
 var chartTitle = "Temperatura w pomieszczeniach";
 var lastTemp0, lastTemp1, lastTemp2, lastDate0, lastDate1, lastDate2, temp0values, temp1values, temp2values; 
 var coalHourValues, lastCoalHourValue, lastCoalHourDate, coalDayValues, lastCoalDayValue, lastCoalDayDate, coalMonthValues, lastCoalMonthValue, lastCoalMonthDate, coalYearValues, lastCoalYearValue, lastCoalYearDate;
+var myChart;
 
 $( "#change_date" ).click(function() {
   var t0values = temp0values.filter(function(item) {
@@ -83,15 +84,19 @@ $( "#change_date" ).click(function() {
 });
 
 $( "#godzina" ).click(function() {
+	myChart.destroy();
 	BuildChart(temp0values, temp1values, temp2values, coalHourValues)
 });
 $( "#dzien" ).click(function() {
+	myChart.destroy();
 	BuildChart(temp0values, temp1values, temp2values, coalDayValues)
 });
 $( "#miesiac" ).click(function() {
+	myChart.destroy();
 	BuildChart(temp0values, temp1values, temp2values, coalMonthValues)
 });
 $( "#rok" ).click(function() {
+	myChart.destroy();
 	BuildChart(temp0values, temp1values, temp2values, coalYearValues)
 });
 
@@ -151,7 +156,9 @@ function BuildChart(temp0values, temp1values, temp2values, coalValues) {
     };
 
     var ctx = document.getElementById("myChart").getContext('2d');
-    var myChart = new Chart(ctx, {
+	
+	
+    myChart = new Chart(ctx, {
         type: 'line',
         data: data,
         options: {
