@@ -45,22 +45,28 @@
 		</tr>
 	</table>
 </div>
-<br/><br/>
-<div id="godzina">Godzina</div>
-<br/><br/>
-<div id="dzien">Dzien</div>
-<br/><br/>
-<div id="miesiac">Miesiac</div>
-<br/><br/>
-<div id="rok">Rok</div>
-<br/><br/>
-<div class="chart" style="position: relative; height:50vh; width:80vw">
-<canvas id="myChart"></canvas>
+<br/>
+<div style="position:relative; margin:auto; width:60vw; font-family:arial,tahoma,verdana;">
+	Pokaż wykres: 
+		<select id="chart_select">
+		  <option value="hourly">Godzinowo</option>
+		  <option value="daily">Dniowo</option>
+		  <option value="monthly">Miesięcznie</option>
+		  <option value="yearly">Rocznie</option>
+		</select>
 </div>
-
+<br/>
+<div id="last_day">Last day</div>
+<div id="last_week">Last week</div>
+<div id="last_month">Last month</div>
+<div id="last_year">Last year</div>
+<br/>
+<div class="chart" style="position:relative; margin:auto; height:30vh; width:70vw">
+	<canvas id="myChart"></canvas>
+</div>
 </body>
-<script>
 
+<script>
 var timeFormat = 'YYYY-MM-DD h:mm:ss';
 var apiUrlTemp = "http://arduino-temperature-ws.herokuapp.com/location";
 var apiUrlCoal = "http://arduino-temperature-ws.herokuapp.com/coal-consumption/total";
@@ -69,40 +75,75 @@ var chartTitle = "Temperatura w pomieszczeniach";
 var lastTemp0, lastTemp1, lastTemp2, lastDate0, lastDate1, lastDate2, temp0values, temp1values, temp2values; 
 var coalHourValues, lastCoalHourValue, lastCoalHourDate, coalDayValues, lastCoalDayValue, lastCoalDayDate, coalMonthValues, lastCoalMonthValue, lastCoalMonthDate, coalYearValues, lastCoalYearValue, lastCoalYearDate;
 var myChart;
+var lastDay = formatDate(new Date(new Date().getTime() - (24 * 60 * 60 * 1000)));
+var lastWeek = formatDate(new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)));
+var lastMonth = formatDate(new Date(new Date().getTime() - (31 * 7 * 24 * 60 * 60 * 1000)));
+var lastYear = formatDate(new Date(new Date().getTime() - (366 * 31 * 7 * 24 * 60 * 60 * 1000)));
 
-$( "#change_date" ).click(function() {
+ $("#chart_select").change(function () {
+	myChart.destroy();
+    if (this.value == 'hourly'){
+		BuildChart(temp0values, temp1values, temp2values, coalHourValues, 'hour', 'YYYY-MM-DD HH:mm')
+	}
+	else if (this.value == 'daily'){
+		BuildChart(temp0values, temp1values, temp2values, coalDayValues, 'day', 'YYYY-MM-DD')
+	}
+	else if (this.value == 'monthly'){
+		BuildChart(temp0values, temp1values, temp2values, coalMonthValues, 'month', 'MMM YYYY')
+	}
+	else if (this.value == 'yearly'){
+		BuildChart(temp0values, temp1values, temp2values, coalYearValues, 'year', 'YYYY')
+	}
+});
+
+$( "#last_day" ).click(function() {
   var t0values = temp0values.filter(function(item) {
-	  return item.x > '2020-01-25';
+	  return item.x > lastDay;
 	});
 	  var t1values = temp1values.filter(function(item) {
-	  return item.x > '2020-01-25';
+	  return item.x > lastDay;
 	});
 	  var t2values = temp2values.filter(function(item) {
-	  return item.x > '2020-01-25';
+	  return item.x > lastDay;
 	});
-	BuildChart(t0values, t1values, t2values, coalValues)
+	var cvalues = coalHourValues.filter(function(item) {
+	  return item.x > lastDay;
+	});
+	BuildChart(t0values, t1values, t2values, cvalues, 'hour', 'YYYY-MM-DD HH:mm')
+});
+$( "#last_week" ).click(function() {
+  var t0values = temp0values.filter(function(item) {
+	  return item.x > lastWeek;
+	});
+	  var t1values = temp1values.filter(function(item) {
+	  return item.x > lastWeek;
+	});
+	  var t2values = temp2values.filter(function(item) {
+	  return item.x > lastWeek;
+	});
+	var cvalues = coalDayValues.filter(function(item) {
+	  return item.x > lastWeek;
+	});
+	BuildChart(t0values, t1values, t2values, cvalues, 'day', 'YYYY-MM-DD')
+});
+$( "#last_month" ).click(function() {
+  var t0values = temp0values.filter(function(item) {
+	  return item.x > lastMonth;
+	});
+	  var t1values = temp1values.filter(function(item) {
+	  return item.x > lastMonth;
+	});
+	  var t2values = temp2values.filter(function(item) {
+	  return item.x > lastMonth;
+	});
+	var cvalues = coalDayValues.filter(function(item) {
+	  return item.x > lastMonth;
+	});
+	BuildChart(t0values, t1values, t2values, cvalues, 'day', 'YYYY-MM-DD')
 });
 
-$( "#godzina" ).click(function() {
-	myChart.destroy();
-	BuildChart(temp0values, temp1values, temp2values, coalHourValues)
-});
-$( "#dzien" ).click(function() {
-	myChart.destroy();
-	BuildChart(temp0values, temp1values, temp2values, coalDayValues)
-});
-$( "#miesiac" ).click(function() {
-	myChart.destroy();
-	BuildChart(temp0values, temp1values, temp2values, coalMonthValues)
-});
-$( "#rok" ).click(function() {
-	myChart.destroy();
-	BuildChart(temp0values, temp1values, temp2values, coalYearValues)
-});
-
-function formatDate() {
-     var d = new Date(),
-         month = '' + (d.getMonth() + 1),
+function formatDate(d) {
+     var month = '' + (d.getMonth() + 1),
          day = '' + d.getDate(),
          year = d.getFullYear(),
          hours = '' + d.getHours(),
@@ -118,22 +159,24 @@ function formatDate() {
      return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
  }
 
-function BuildChart(temp0values, temp1values, temp2values, coalValues) {
+function BuildChart(temp0values, temp1values, temp2values, coalValues, timeUnit, toolTipFormat) {
     var data = {
         datasets: [{
 			label: 'kotlownia', // Name the series
 			yAxisID: "temperature",
-            data: temp1values,
+            data: temp0values,
 			fill: false,
 			borderColor: 'rgb(250, 0, 250)',
+			borderWidth:1,
 			pointRadius:'2'
 		},
 		{
             label: 'piec', // Name the series
 			yAxisID: "temperature",
-            data: temp0values,
+            data: temp1values,
 			fill: false,
 			borderColor: 'rgb(0, 250, 250)',
+			borderWidth:1,
 			pointRadius:'2'
 		},
 		{
@@ -142,22 +185,24 @@ function BuildChart(temp0values, temp1values, temp2values, coalValues) {
             data: temp2values,
 			fill: false,
 			borderColor: 'rgb(250, 250, 0)',
+			borderWidth:1,
 			pointRadius:'2'
 		}, 
 		{
 			label: 'spalanie', // Name the series
 			yAxisID: "coal",
             data: coalValues,
-			fill: false,
+			minBarLength: 5,
+			backgroundColor: 'rgb(200, 200, 200)',
 			borderColor: 'rgb(0, 0, 0)',
+			borderWidth:1,
 			pointRadius:'2'
 		}
 		]
     };
 
     var ctx = document.getElementById("myChart").getContext('2d');
-	
-	
+		
     myChart = new Chart(ctx, {
         type: 'line',
         data: data,
@@ -166,27 +211,22 @@ function BuildChart(temp0values, temp1values, temp2values, coalValues) {
             responsive: true, // Instruct chart js to respond nicely.
 			title:      {
                 display: true,
+				fontSize: 24,
                 text:    chartTitle
             },
             scales: {
                 xAxes: [{
 					type:       "time",
 					time: {
-					  tooltipFormat:'YYYY-MM-DD HH:mm:ss', 
+					  tooltipFormat: toolTipFormat, 
+					  unit: timeUnit,
 					  displayFormats: {
-						 'millisecond':'YYYY-MM-DD HH:mm',
-						 'second': 'YYYY-MM-DD HH:mm',
-						 'minute': 'YYYY-MM-DD HH:mm',
-						 'hour': 'YYYY-MM-DD HH:mm',
-						 'day': 'YYYY-MM-DD',
-						 'week': 'YYYY-MM-DD',
-						 'month': 'YYYY-MM-DD',
-						 'quarter': 'YYYY-MM-DD',
-						 'year': 'YYYY',
+						 hour: 'YYYY-MM-DD HH:mm'
 					  }
 					},
                     scaleLabel: {
                         display: true,
+						fontSize: 16,
                         labelString: 'Data'
                     }
                 }],
@@ -195,6 +235,7 @@ function BuildChart(temp0values, temp1values, temp2values, coalValues) {
 					position: "left",
                     scaleLabel: {
                         display: true,
+						fontSize: 16,
                         labelString: 'Temperatura (w stopniach Celsjusza)'
                     }
                 },
@@ -203,6 +244,7 @@ function BuildChart(temp0values, temp1values, temp2values, coalValues) {
 					position: "right",
                     scaleLabel: {
                         display:     true,
+						fontSize: 16,
                         labelString: 'Spalanie węgla (w kg)'
                     }
                 }]
@@ -212,6 +254,7 @@ function BuildChart(temp0values, temp1values, temp2values, coalValues) {
 
     return myChart;
 }
+
 
 var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -270,13 +313,26 @@ var xhttp = new XMLHttpRequest();
   var xhttpCoalSupply = new XMLHttpRequest();
   xhttpCoalSupply.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-        coalSupplyDate.innerHTML = formatDate();
+        coalSupplyDate.innerHTML = formatDate(new Date());
 		coalSupplyValue.innerHTML = (Math.round(this.response * 100) / 100).toFixed(3).replace('.',',') + " kg";
     }
   };
   xhttpCoalSupply.open("GET", apiUrlCoalSupply, false);
   xhttpCoalSupply.send();
   
-  BuildChart(temp0values, temp1values, temp2values, coalHourValues);
+	var t0values = temp0values.filter(function(item) {		
+		return item.x > lastDay;
+	});
+	  var t1values = temp1values.filter(function(item) {
+	  return item.x > lastDay;
+	});
+	  var t2values = temp2values.filter(function(item) {
+	  return item.x > lastDay;
+	});
+	var cvalues = coalHourValues.filter(function(item) {
+	  return item.x > lastDay;
+	});
+  
+  BuildChart(t0values, t1values, t2values, cvalues, 'hour', 'YYYY-MM-DD HH:mm');
 </script>
 </html>
