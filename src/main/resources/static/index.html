@@ -49,17 +49,12 @@
 <div style="position:relative; margin:auto; width:60vw; font-family:arial,tahoma,verdana;">
 	Pokaż wykres: 
 		<select id="chart_select">
-		  <option value="hourly">Godzinowo</option>
-		  <option value="daily">Dniowo</option>
-		  <option value="monthly">Miesięcznie</option>
+		  <option value="hourly">Godzinowo (ostatnia doba)</option>
+		  <option value="daily">Dniowo (ostatni miesiąc)</option>
+		  <option value="monthly">Miesięcznie (ostatni rok)</option>
 		  <option value="yearly">Rocznie</option>
 		</select>
 </div>
-<br/>
-<div id="last_day">Last day</div>
-<div id="last_week">Last week</div>
-<div id="last_month">Last month</div>
-<div id="last_year">Last year</div>
 <br/>
 <div class="chart" style="position:relative; margin:auto; height:30vh; width:70vw">
 	<canvas id="myChart"></canvas>
@@ -83,64 +78,55 @@ var lastYear = formatDate(new Date(new Date().getTime() - (366 * 31 * 7 * 24 * 6
  $("#chart_select").change(function () {
 	myChart.destroy();
     if (this.value == 'hourly'){
-		BuildChart(temp0values, temp1values, temp2values, coalHourValues, 'hour', 'YYYY-MM-DD HH:mm')
+		var t0values = temp0values.filter(function(item) {
+		  return item.x > lastDay;
+		});
+		var t1values = temp1values.filter(function(item) {
+		  return item.x > lastDay;
+		});
+		var t2values = temp2values.filter(function(item) {
+		  return item.x > lastDay;
+		});
+		var cvalues = coalHourValues.filter(function(item) {
+		  return item.x > lastDay;
+		});
+		BuildChart(t0values, t1values, t2values, cvalues, 'hour', 'YYYY-MM-DD HH:mm')
 	}
 	else if (this.value == 'daily'){
-		BuildChart(temp0values, temp1values, temp2values, coalDayValues, 'day', 'YYYY-MM-DD')
+		var t0values = temp0values.filter(function(item) {
+			return item.x > lastMonth;
+		});
+		var t1values = temp1values.filter(function(item) {
+			return item.x > lastMonth;
+		});
+		var t2values = temp2values.filter(function(item) {
+			return item.x > lastMonth;
+		});
+		var cvalues = coalDayValues.filter(function(item) {
+			return item.x > lastMonth;
+		});
+		BuildChart(t0values, t1values, t2values, cvalues, 'day', 'YYYY-MM-DD')
 	}
 	else if (this.value == 'monthly'){
-		BuildChart(temp0values, temp1values, temp2values, coalMonthValues, 'month', 'MMM YYYY')
+		var t0values = temp0values.filter(function(item) {
+			return item.x > lastYear;
+		});
+		var t1values = temp1values.filter(function(item) {
+			return item.x > lastYear;
+		});
+		var t2values = temp2values.filter(function(item) {
+			return item.x > lastYear;
+		});
+		var cvalues = coalMonthValues.filter(function(item) {
+			return item.x > lastYear;
+		});
+		BuildChart(t0values, t1values, t2values, cvalues, 'month', 'MMM YYYY')
 	}
 	else if (this.value == 'yearly'){
 		BuildChart(temp0values, temp1values, temp2values, coalYearValues, 'year', 'YYYY')
 	}
 });
 
-$( "#last_day" ).click(function() {
-  var t0values = temp0values.filter(function(item) {
-	  return item.x > lastDay;
-	});
-	  var t1values = temp1values.filter(function(item) {
-	  return item.x > lastDay;
-	});
-	  var t2values = temp2values.filter(function(item) {
-	  return item.x > lastDay;
-	});
-	var cvalues = coalHourValues.filter(function(item) {
-	  return item.x > lastDay;
-	});
-	BuildChart(t0values, t1values, t2values, cvalues, 'hour', 'YYYY-MM-DD HH:mm')
-});
-$( "#last_week" ).click(function() {
-  var t0values = temp0values.filter(function(item) {
-	  return item.x > lastWeek;
-	});
-	  var t1values = temp1values.filter(function(item) {
-	  return item.x > lastWeek;
-	});
-	  var t2values = temp2values.filter(function(item) {
-	  return item.x > lastWeek;
-	});
-	var cvalues = coalDayValues.filter(function(item) {
-	  return item.x > lastWeek;
-	});
-	BuildChart(t0values, t1values, t2values, cvalues, 'day', 'YYYY-MM-DD')
-});
-$( "#last_month" ).click(function() {
-  var t0values = temp0values.filter(function(item) {
-	  return item.x > lastMonth;
-	});
-	  var t1values = temp1values.filter(function(item) {
-	  return item.x > lastMonth;
-	});
-	  var t2values = temp2values.filter(function(item) {
-	  return item.x > lastMonth;
-	});
-	var cvalues = coalDayValues.filter(function(item) {
-	  return item.x > lastMonth;
-	});
-	BuildChart(t0values, t1values, t2values, cvalues, 'day', 'YYYY-MM-DD')
-});
 
 function formatDate(d) {
      var month = '' + (d.getMonth() + 1),
