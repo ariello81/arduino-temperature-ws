@@ -12,22 +12,22 @@ public interface HallSensorCounterRepository extends JpaRepository<HallSensorCou
 
 
     @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-%d %H:00:00') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d %H:00:00')",
+            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d %H:00:00') ORDER BY date ASC",
             nativeQuery = true)
     public List<HallSensorCounterDTO> getTotalSensorQuantitiesByHour();
 
     @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-%d 00:00:00') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d 00:00:00')",
+            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-%d 00:00:00') ORDER BY date ASC",
             nativeQuery = true)
     public List<HallSensorCounterDTO> getTotalSensorQuantitiesByDay();
 
     @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-%m-01 00:00:00') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-01 00:00:00')",
+            "GROUP BY DATE_FORMAT(timestamp,'%Y-%m-01 00:00:00') ORDER BY date ASC",
             nativeQuery = true)
     public List<HallSensorCounterDTO> getTotalSensorQuantitiesByMonth();
 
     @Query(value="SELECT DATE_FORMAT(timestamp,'%Y-01-01 00:00:00') AS date, sum(quantity) AS sumQuantity FROM `hall_sensor_counter` " +
-            "GROUP BY DATE_FORMAT(timestamp,'%Y-01-01 00:00:00')",
+            "GROUP BY DATE_FORMAT(timestamp,'%Y-01-01 00:00:00') ORDER BY date ASC",
             nativeQuery = true)
     public List<HallSensorCounterDTO> getTotalSensorQuantitiesByYear();
 
