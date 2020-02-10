@@ -46,6 +46,9 @@
 	</table>
 </div>
 <br/>
+<div id="coal_consumption_history">
+</div>
+<br/>
 <div style="position:relative; margin:auto; width:60vw; font-family:arial,tahoma,verdana;">
 	Pokaż wykres: 
 		<select id="chart_select">
@@ -144,6 +147,45 @@ function formatDate(d) {
 
      return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
  }
+ 
+ 
+ function BuildTables(){
+	for(var i = 0; i < coalYearValues.length; i++){
+		var div = document.createElement("div");
+		var date = document.createTextNode(coalYearValues[i].x);
+		var consumptionValue = document.createTextNode(coalYearValues[i].y);
+		div.appendChild(date);
+		div.appendChild(consumptionValue);
+		document.getElementById("coal_consumption_history").appendChild(div);
+		for(var j = 0; j < coalMonthValues.length; j++){
+			var table = document.createElement("table");
+			var tr = document.createElement("tr");
+			var th1 = document.createElement("th");
+			var th2 = document.createElement("th");
+			var date = document.createTextNode(coalMonthValues[j].x);
+			var consumptionValue = document.createTextNode(coalMonthValues[j].y);
+			th1.appendChild(date);
+			th2.appendChild(consumptionValue);
+			tr.appendChild(th1);
+			tr.appendChild(th2);
+			table.appendChild(tr);
+			for(var k = 0; k < coalDayValues.length; k++){
+				var tr = document.createElement("tr");
+				var td1 = document.createElement("td");
+				var td2 = document.createElement("td");
+				var date = document.createTextNode(coalDayValues[k].x);
+				var consumptionValue = document.createTextNode(coalDayValues[k].y);
+				td1.appendChild(date);
+				td2.appendChild(consumptionValue);
+				tr.appendChild(td1);
+				tr.appendChild(td2);
+				table.appendChild(tr);
+				div.appendChild(table);
+			}
+		}
+	}
+ }
+
 
 function BuildChart(temp0values, temp1values, temp2values, coalValues, timeUnit, toolTipFormat) {
     var data = {
@@ -318,7 +360,9 @@ var xhttp = new XMLHttpRequest();
 	var cvalues = coalHourValues.filter(function(item) {
 	  return item.x > lastDay;
 	});
+	
+	BuildTables();
   
-  BuildChart(t0values, t1values, t2values, cvalues, 'hour', 'YYYY-MM-DD HH:mm');
+//  BuildChart(t0values, t1values, t2values, cvalues, 'hour', 'YYYY-MM-DD HH:mm');
 </script>
 </html>
