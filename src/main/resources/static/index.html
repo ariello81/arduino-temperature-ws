@@ -1,25 +1,79 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
 	<style>
+	* {
+	  box-sizing: border-box;
+	}
+
+	.row::after {
+	  content: "";
+	  clear: both;
+	  display: table;
+	}
+
+	[class*="col-"] {
+	  float: left;
+	  padding: 15px;
+	}
+
+	html {
+	  font-family: "Lucida Sans", sans-serif;
+	}
+	
+	/* For mobile phones: */
+	[class*="col-"] {
+	  width: 100%;
+	}
+
+	@media only screen and (min-width: 600px) {
+	  /* For tablets: */
+	  .col-s-1 {width: 8.33%;}
+	  .col-s-2 {width: 16.66%;}
+	  .col-s-3 {width: 25%;}
+	  .col-s-4 {width: 33.33%;}
+	  .col-s-5 {width: 41.66%;}
+	  .col-s-6 {width: 50%;}
+	  .col-s-7 {width: 58.33%;}
+	  .col-s-8 {width: 66.66%;}
+	  .col-s-9 {width: 75%;}
+	  .col-s-10 {width: 83.33%;}
+	  .col-s-11 {width: 91.66%;}
+	  .col-s-12 {width: 100%;}
+	}
+	@media only screen and (min-width: 768px) {
+	  /* For desktop: */
+	  .col-1 {width: 8.33%;}
+	  .col-2 {width: 16.66%;}
+	  .col-3 {width: 25%;}
+	  .col-4 {width: 33.33%;}
+	  .col-5 {width: 41.66%;}
+	  .col-6 {width: 50%;}
+	  .col-7 {width: 58.33%;}
+	  .col-8 {width: 66.66%;}
+	  .col-9 {width: 75%;}
+	  .col-10 {width: 83.33%;}
+	  .col-11 {width: 91.66%;}
+	  .col-12 {width: 100%;}
+	}
+	
 	.paramsTable {
+		font-size: 18px;
 		text-align:center;
 		margin-left:auto; 
 		margin-right:auto; 
-		font-family:arial,tahoma,verdana;
 		border-collapse: collapse;
 	}
 	.paramsTable td{
 		border: 1px solid #999999;
 		padding:10px;
 	}
+	
 	.coalConsumptionTable {
-		font-family:arial,tahoma,verdana;
-		font-size: 10px;
 		float:left;
 		width: 8vw;
 		border-collapse: collapse;
@@ -29,38 +83,42 @@
 		border: 1px solid #999999;
 		padding:5px;
 	}
+	
+	.select_period{
+		margin-left:auto; 
+		margin-right:auto;
+	}	
 	</style>
 </head>
 <body>
-<div style="position:relative; width:90vw; margin-bottom:20px;">
+<div class="col-12 col-s-12">
 	<table class="paramsTable">
 		<tr>
 			<td colspan="3" style="font-weight:bolder;">Ostatnio zarejestrowane parametry:</td>
 		</tr>
-		<tr style="background-color:#eeaaee">
+		<tr style="background-color:rgba(200, 0, 200, 0.5);">
 			<td>Kotłownia:</td>
 			<td id="temp0" style="font-weight:bolder;"></td>
 			<td id="date0"></td>
 		</tr>
-		<tr style="background-color:#aaeeee">
+		<tr style="background-color:rgba(0, 200, 200, 0.5);">
 			<td>Piec:</td>
 			<td id="temp1" style="font-weight:bolder;"></td>
 			<td id="date1"></td>
 		</tr>
-		<tr style="background-color:#eeeeaa">
+		<tr style="background-color:rgba(200, 200, 0, 0.5);">
 			<td>Dwór:</td>
 			<td id="temp2" style="font-weight:bolder;"></td>
 			<td id="date2"></td>
 		</tr>
-		<tr style="background-color:#bbbbbb">
+		<tr style="background-color:rgba(150, 150, 150, 0.5);">
 			<td>Zapas węgla:</td>
 			<td id="coalSupplyValue" style="font-weight:bolder;"></td>
 			<td id="coalSupplyDate"></td>
 		</tr>
 	</table>
 </div>
-<div id="coal_consumption_history" style="width:100vw; position:relative; display: inline-block; margin-bottom:20px;"></div>
-<div style="position:relative; margin:auto; width:60vw; font-family:arial,tahoma,verdana;">
+<div class="select_period col-12 col-s-12">
 	Pokaż wykres: 
 		<select id="chart_select">
 		  <option value="hourly">Godzinowo (ostatnia doba)</option>
@@ -69,318 +127,11 @@
 		  <option value="yearly">Rocznie</option>
 		</select>
 </div>
-<div class="chart" style="position:relative; margin:auto; height:30vh; width:70vw">
+<div class="chart col-9 col-s-12">
 	<canvas id="myChart"></canvas>
 </div>
+<!--<div id="coal_consumption_history" style="width:100vw; position:relative; display: inline-block; margin-bottom:20px;"></div>
+-->
 </body>
-
-<script>
-var timeFormat = 'YYYY-MM-DD h:mm:ss';
-var apiUrlTemp = "http://arduino-temperature-ws.herokuapp.com/location";
-var apiUrlCoal = "http://arduino-temperature-ws.herokuapp.com/coal-consumption/total";
-var apiUrlCoalSupply = "http://arduino-temperature-ws.herokuapp.com/coal-supply";
-var chartTitle = "Temperatura w pomieszczeniach";
-var lastTemp0, lastTemp1, lastTemp2, lastDate0, lastDate1, lastDate2, temp0values, temp1values, temp2values; 
-var coalHourValues, lastCoalHourValue, lastCoalHourDate, coalDayValues, lastCoalDayValue, lastCoalDayDate, coalMonthValues, lastCoalMonthValue, lastCoalMonthDate, coalYearValues, lastCoalYearValue, lastCoalYearDate;
-var myChart;
-var lastDay = formatDate(new Date(new Date().getTime() - (24 * 60 * 60 * 1000)));
-var lastWeek = formatDate(new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000)));
-var lastMonth = formatDate(new Date(new Date().getTime() - (31 * 7 * 24 * 60 * 60 * 1000)));
-var lastYear = formatDate(new Date(new Date().getTime() - (366 * 31 * 7 * 24 * 60 * 60 * 1000)));
-
- $("#chart_select").change(function () {
-	myChart.destroy();
-    if (this.value == 'hourly'){
-		var t0values = temp0values.filter(function(item) {
-		  return item.x > lastDay;
-		});
-		var t1values = temp1values.filter(function(item) {
-		  return item.x > lastDay;
-		});
-		var t2values = temp2values.filter(function(item) {
-		  return item.x > lastDay;
-		});
-		var cvalues = coalHourValues.filter(function(item) {
-		  return item.x > lastDay;
-		});
-		BuildChart(t0values, t1values, t2values, cvalues, 'hour', 'YYYY-MM-DD HH:mm')
-	}
-	else if (this.value == 'daily'){
-		var t0values = temp0values.filter(function(item) {
-			return item.x > lastMonth;
-		});
-		var t1values = temp1values.filter(function(item) {
-			return item.x > lastMonth;
-		});
-		var t2values = temp2values.filter(function(item) {
-			return item.x > lastMonth;
-		});
-		var cvalues = coalDayValues.filter(function(item) {
-			return item.x > lastMonth;
-		});
-		BuildChart(t0values, t1values, t2values, cvalues, 'day', 'YYYY-MM-DD')
-	}
-	else if (this.value == 'monthly'){
-		var t0values = temp0values.filter(function(item) {
-			return item.x > lastYear;
-		});
-		var t1values = temp1values.filter(function(item) {
-			return item.x > lastYear;
-		});
-		var t2values = temp2values.filter(function(item) {
-			return item.x > lastYear;
-		});
-		var cvalues = coalMonthValues.filter(function(item) {
-			return item.x > lastYear;
-		});
-		BuildChart(t0values, t1values, t2values, cvalues, 'month', 'MMM YYYY')
-	}
-	else if (this.value == 'yearly'){
-		BuildChart(temp0values, temp1values, temp2values, coalYearValues, 'year', 'YYYY')
-	}
-});
-
-
-function formatDate(d) {
-     var month = '' + (d.getMonth() + 1),
-         day = '' + d.getDate(),
-         year = d.getFullYear(),
-         hours = '' + d.getHours(),
-         minutes = '' + d.getMinutes(),
-         seconds = '' + d.getSeconds();
-
-     if (month.length < 2) month = '0' + month;
-     if (day.length < 2) day = '0' + day;
-     if (hours.length < 2) hours = '0' + hours;
-     if (minutes.length < 2) minutes = '0' + minutes;
-     if (seconds.length < 2) seconds = '0' + seconds;
-
-     return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
- }
- 
- 
- function BuildTables(){
-	for(var i = 0; i < coalYearValues.length; i++){
-		var div = document.createElement("div");
-		var date = document.createTextNode(coalYearValues[i].x);
-		var consumptionValue = document.createTextNode(coalYearValues[i].y);
-		var year = coalYearValues[i].x.substring(0,4);
-		document.getElementById("coal_consumption_history").appendChild(div);
-		var monthValues = coalMonthValues.filter(function(item) {
-			return item.x.substring(0,4) == year;
-		});
-		for(var j = 0; j < monthValues.length; j++){
-			var table = document.createElement("table");
-			table.setAttribute("class", "coalConsumptionTable");
-			var tr = document.createElement("tr");
-			var th1 = document.createElement("th");
-			var th2 = document.createElement("th");
-			var consumptionValue = document.createTextNode(monthValues[j].y);
-			var yearMonth = monthValues[j].x.substring(0,7);
-			var yearMonthDate = document.createTextNode(yearMonth);
-			th1.appendChild(yearMonthDate);
-			th2.appendChild(consumptionValue);
-			tr.appendChild(th1);
-			tr.appendChild(th2);
-			table.appendChild(tr);
-			var dayValues = coalDayValues.filter(function(item) {
-				return item.x.substring(0,7) == yearMonth;
-			});
-			for(var k = 0; k < dayValues.length; k++){
-				var tr = document.createElement("tr");
-				var td1 = document.createElement("td");
-				var td2 = document.createElement("td");
-				var consumptionValue = document.createTextNode(dayValues[k].y);
-				var yearMonthDay = dayValues[k].x.substring(0,10);
-				var yearMonthDayDate = document.createTextNode(yearMonthDay);
-				td1.appendChild(yearMonthDayDate);
-				td2.appendChild(consumptionValue);
-				tr.appendChild(td1);
-				tr.appendChild(td2);
-				table.appendChild(tr);
-				div.appendChild(table);
-			}
-		}
-	}
- }
-
-
-function BuildChart(temp0values, temp1values, temp2values, coalValues, timeUnit, toolTipFormat) {
-    var data = {
-        datasets: [{
-			label: 'kotlownia', // Name the series
-			yAxisID: "temperature",
-            data: temp0values,
-			fill: false,
-			borderColor: 'rgb(250, 0, 250)',
-			borderWidth:1,
-			pointRadius:'2'
-		},
-		{
-            label: 'piec', // Name the series
-			yAxisID: "temperature",
-            data: temp1values,
-			fill: false,
-			borderColor: 'rgb(0, 250, 250)',
-			borderWidth:1,
-			pointRadius:'2'
-		},
-		{
-			label: 'dwor', // Name the series
-			yAxisID: "temperature",
-            data: temp2values,
-			fill: false,
-			borderColor: 'rgb(250, 250, 0)',
-			borderWidth:1,
-			pointRadius:'2'
-		}, 
-		{
-			label: 'spalanie', // Name the series
-			yAxisID: "coal",
-            data: coalValues,
-			minBarLength: 5,
-			backgroundColor: 'rgb(200, 200, 200)',
-			borderColor: 'rgb(0, 0, 0)',
-			borderWidth:1,
-			pointRadius:'2'
-		}
-		]
-    };
-
-    var ctx = document.getElementById("myChart").getContext('2d');
-		
-    myChart = new Chart(ctx, {
-        type: 'line',
-        data: data,
-        options: {
-			animation: false,
-            responsive: true, // Instruct chart js to respond nicely.
-			title:      {
-                display: true,
-				fontSize: 24,
-                text:    chartTitle
-            },
-            scales: {
-                xAxes: [{
-					type:       "time",
-					time: {
-					  tooltipFormat: toolTipFormat, 
-					  unit: timeUnit,
-					  displayFormats: {
-						 hour: 'YYYY-MM-DD HH:mm'
-					  }
-					},
-                    scaleLabel: {
-                        display: true,
-						fontSize: 16,
-                        labelString: 'Data'
-                    }
-                }],
-                yAxes: [{
-					id: "temperature",
-					position: "left",
-                    scaleLabel: {
-                        display: true,
-						fontSize: 16,
-                        labelString: 'Temperatura (w stopniach Celsjusza)'
-                    }
-                },
-				{
-					id: "coal",
-					position: "right",
-                    scaleLabel: {
-                        display:     true,
-						fontSize: 16,
-                        labelString: 'Spalanie węgla (w kg)'
-                    }
-                }]
-            },
-        }
-    });
-
-    return myChart;
-}
-
-
-var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var json = JSON.parse(this.response);
-		// Map json labels  back to values array		  
-		temp0values = json[0].temperatures.map(function (e) {
-			lastDate0 = json[0].temperatures[json[0].temperatures.length-1].x;
-			lastTemp0 = json[0].temperatures[json[0].temperatures.length-1].y;
-			date0.innerHTML = moment(lastDate0).format('YYYY-MM-DD HH:mm:ss');
-			temp0.innerHTML = lastTemp0 + " &#176;C";
-			return e;
-		});
-		temp1values = json[1].temperatures.map(function (e) {
-			lastDate1 = json[1].temperatures[json[1].temperatures.length-1].x;
-			lastTemp1 = json[1].temperatures[json[1].temperatures.length-1].y;
-			date1.innerHTML = moment(lastDate1).format('YYYY-MM-DD HH:mm:ss');
-			temp1.innerHTML = lastTemp1 + " &#176;C";
-			return e;
-		});
-		temp2values = json[2].temperatures.map(function (e) {
-			lastDate2 = json[2].temperatures[json[2].temperatures.length-1].x;
-			lastTemp2 = json[2].temperatures[json[2].temperatures.length-1].y;
-			date2.innerHTML = moment(lastDate2).format('YYYY-MM-DD HH:mm:ss');
-			temp2.innerHTML = lastTemp2 + " &#176;C";
-			return e;
-		});
-		
-    }
-  };
-  xhttp.open("GET", apiUrlTemp, false);
-  xhttp.send();
-  
-  var xhttpCoal = new XMLHttpRequest();
-  xhttpCoal.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      var json = JSON.parse(this.response);
-		// Map json labels  back to values array		  
-		coalHourValues = json[0].map(function (e) {			
-			return e;
-		});	
-		coalDayValues = json[1].map(function (e) {			
-			return e;
-		});	
-		coalMonthValues = json[2].map(function (e) {			
-			return e;
-		});	
-		coalYearValues = json[3].map(function (e) {			
-			return e;
-		});	
-    }
-  };
-  xhttpCoal.open("GET", apiUrlCoal, false);
-  xhttpCoal.send();
-
-  var xhttpCoalSupply = new XMLHttpRequest();
-  xhttpCoalSupply.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-        coalSupplyDate.innerHTML = formatDate(new Date());
-		coalSupplyValue.innerHTML = (Math.round(this.response * 100) / 100).toFixed(3).replace('.',',') + " kg";
-    }
-  };
-  xhttpCoalSupply.open("GET", apiUrlCoalSupply, false);
-  xhttpCoalSupply.send();
-  
-	var t0values = temp0values.filter(function(item) {		
-		return item.x > lastDay;
-	});
-	  var t1values = temp1values.filter(function(item) {
-	  return item.x > lastDay;
-	});
-	  var t2values = temp2values.filter(function(item) {
-	  return item.x > lastDay;
-	});
-	var cvalues = coalHourValues.filter(function(item) {
-	  return item.x > lastDay;
-	});
-	
-	BuildTables();
-  
-  BuildChart(t0values, t1values, t2values, cvalues, 'hour', 'YYYY-MM-DD HH:mm');
-</script>
+	<script src="js/scripts.js"></script>
 </html>

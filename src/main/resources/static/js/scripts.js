@@ -88,7 +88,8 @@ function formatDate(d) {
 		var date = document.createTextNode(coalYearValues[i].x);
 		var consumptionValue = document.createTextNode(coalYearValues[i].y);
 		var year = coalYearValues[i].x.substring(0,4);
-		document.getElementById("coal_consumption_history").appendChild(div);
+		$('#coal_consumption_history').append(div);
+		//document.getElementById("coal_consumption_history").appendChild(div);
 		var monthValues = coalMonthValues.filter(function(item) {
 			return item.x.substring(0,4) == year;
 		});
@@ -226,6 +227,7 @@ function BuildChart(temp0values, temp1values, temp2values, coalValues, timeUnit,
 }
 
 
+
 var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -234,22 +236,22 @@ var xhttp = new XMLHttpRequest();
 		temp0values = json[0].temperatures.map(function (e) {
 			lastDate0 = json[0].temperatures[json[0].temperatures.length-1].x;
 			lastTemp0 = json[0].temperatures[json[0].temperatures.length-1].y;
-			date0.innerHTML = moment(lastDate0).format('YYYY-MM-DD HH:mm:ss');
-			temp0.innerHTML = lastTemp0 + " &#176;C";
+			$("#date0").html(moment(lastDate0).format('YYYY-MM-DD HH:mm:ss'));
+			$("#temp0").html(lastTemp0 + " &#176;C");
 			return e;
 		});
 		temp1values = json[1].temperatures.map(function (e) {
 			lastDate1 = json[1].temperatures[json[1].temperatures.length-1].x;
 			lastTemp1 = json[1].temperatures[json[1].temperatures.length-1].y;
-			date1.innerHTML = moment(lastDate1).format('YYYY-MM-DD HH:mm:ss');
-			temp1.innerHTML = lastTemp1 + " &#176;C";
+			$("#date1").html(moment(lastDate1).format('YYYY-MM-DD HH:mm:ss'));
+			$("#temp1").html(lastTemp1 + " &#176;C");
 			return e;
 		});
 		temp2values = json[2].temperatures.map(function (e) {
 			lastDate2 = json[2].temperatures[json[2].temperatures.length-1].x;
 			lastTemp2 = json[2].temperatures[json[2].temperatures.length-1].y;
-			date2.innerHTML = moment(lastDate2).format('YYYY-MM-DD HH:mm:ss');
-			temp2.innerHTML = lastTemp2 + " &#176;C";
+			$("#date2").html(moment(lastDate2).format('YYYY-MM-DD HH:mm:ss'));
+			$("#temp2").html(lastTemp2 + " &#176;C");
 			return e;
 		});
 
@@ -283,8 +285,8 @@ var xhttp = new XMLHttpRequest();
   var xhttpCoalSupply = new XMLHttpRequest();
   xhttpCoalSupply.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-        coalSupplyDate.innerHTML = formatDate(new Date());
-		coalSupplyValue.innerHTML = (Math.round(this.response * 100) / 100).toFixed(3).replace('.',',') + " kg";
+        $("#coalSupplyDate").html(formatDate(new Date()));
+		$("#coalSupplyValue").html((Math.round(this.response * 100) / 100).toFixed(3).replace('.',',') + " kg");
     }
   };
   xhttpCoalSupply.open("GET", apiUrlCoalSupply, false);
