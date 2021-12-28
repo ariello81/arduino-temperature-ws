@@ -22,11 +22,11 @@ public class ArduinoTemperatureWsRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        /*locationService.addLocation(new Location("piec"));
+        locationService.addLocation(new Location("piec"));
         locationService.addLocation(new Location("dwor"));
         locationService.addLocation(new Location("kotlownia"));
 
-        temperatureService.addTemperature(new Temperature(1L, 22.3));
+        /*temperatureService.addTemperature(new Temperature(1L, 22.3));
         temperatureService.addTemperature(new Temperature(2L, 15.3));
         temperatureService.addTemperature(new Temperature(3L, -1.3));
         Thread.sleep(5000);
