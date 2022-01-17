@@ -24,6 +24,11 @@ public class TemperatureController {
         temperatureService.addTemperature(temperature);
     }
 
+    @GetMapping("/remove/{location}/{date}")
+    public void removeTemperatureByLocationAndDateLessThan(@PathVariable("location") String location, @PathVariable("date") String date){
+        temperatureService.removeTemperatureByLocationAndDateLessThan(location, date);
+    }
+
     @GetMapping
     public ResponseEntity<List<Temperature>> getAllTemperatures(){
         return ResponseEntity.ok(temperatureService.getAllTemperatures());

@@ -2,10 +2,12 @@ package pl.ryzykowski.arduino.arduinotemperaturews.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.ryzykowski.arduino.arduinotemperaturews.config.Globals;
 import pl.ryzykowski.arduino.arduinotemperaturews.entity.Temperature;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.LocationRepository;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.TemperatureRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,4 +38,8 @@ public class TemperatureService {
                 .collect(Collectors.toList());
     }
 
+    public void removeTemperatureByLocationAndDateLessThan(String location, String date) {
+        LocalDateTime timestamp = LocalDateTime.parse(date, Globals.DATETIME_FORMATTER);
+        temperatureRepository.removeByLocationAndTimestampLessThan(location, timestamp);
+    }
 }
