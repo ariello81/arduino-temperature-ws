@@ -7,6 +7,7 @@ import pl.ryzykowski.arduino.arduinotemperaturews.entity.Temperature;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.LocationRepository;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.TemperatureRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public class TemperatureService {
     }
 
     public void removeTemperatureByLocationAndDateLessThan(String location, String date) {
-        LocalDateTime timestamp = LocalDateTime.parse(date, Globals.DATETIME_FORMATTER);
+        LocalDateTime timestamp = LocalDate.parse(date, Globals.DATETIME_FORMATTER).atStartOfDay();
         temperatureRepository.removeByLocationAndTimestampLessThan(location, timestamp);
     }
 }
