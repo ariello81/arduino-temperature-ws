@@ -39,9 +39,8 @@ public class TemperatureService {
                 .collect(Collectors.toList());
     }
 
-    public void removeTemperatureByLocationIdAndDateLessThan(String location, String date) {
+    public void removeTemperatureByLocationAndDateLessThan(String location, String date) {
         LocalDateTime timestamp = LocalDate.parse(date, Globals.DATETIME_FORMATTER).atStartOfDay();
-        int locationId = Integer.parseInt(location);
-        temperatureRepository.removeByLocationIdAndTimestampLessThan(locationId, timestamp);
+        temperatureRepository.removeByLocationDescriptionAndTimestampLessThan(location, timestamp);
     }
 }

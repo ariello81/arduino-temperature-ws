@@ -7,6 +7,6 @@ import java.time.LocalDateTime;
 
 public interface TemperatureRepository extends JpaRepository<Temperature, Long> {
 
-    void removeByLocationIdAndTimestampLessThan(long locationId, LocalDateTime timestamp);
+    void removeByLocationDescriptionAndTimestampLessThan(String location, LocalDateTime timestamp);
 
 }
