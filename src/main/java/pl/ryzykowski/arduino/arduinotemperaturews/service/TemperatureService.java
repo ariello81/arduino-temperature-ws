@@ -40,7 +40,7 @@ public class TemperatureService {
     }
 
     public void removeTemperatureByLocationAndDateLessThan(String location, String date) {
-        java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(date + "00:00:00");
+        java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(date + " 00:00:00");
         temperatureRepository.removeByLocationDescriptionAndTimestampLessThan(location, timestamp);
     }
 }
