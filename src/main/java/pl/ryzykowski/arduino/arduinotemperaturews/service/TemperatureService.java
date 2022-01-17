@@ -7,6 +7,7 @@ import pl.ryzykowski.arduino.arduinotemperaturews.entity.Temperature;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.LocationRepository;
 import pl.ryzykowski.arduino.arduinotemperaturews.repository.TemperatureRepository;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +40,7 @@ public class TemperatureService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void removeTemperatureByLocationAndDateLessThan(String location, String date) {
         java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(date + " 00:00:00");
         temperatureRepository.removeByLocationDescriptionAndTimestampLessThan(location, timestamp);
